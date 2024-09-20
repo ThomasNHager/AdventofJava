@@ -6,7 +6,7 @@ public class Part2 {
   public static void main(String[] args){
 
     ReadFile rf = new ReadFile();
-    ArrayList<String> inputArray = rf.readFile("./testInput.txt");
+    ArrayList<String> inputArray = rf.readFile("./puzzleInput.txt");
 
     String[] searchArray = {
       "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
@@ -72,6 +72,9 @@ public class Part2 {
       int lastInt = conversionMap.get(lastString);
 
       runningTotal = runningTotal + (10 * firstInt) + lastInt;
+
+      numIndex.clear();
+      revNumIndex.clear();
 
     }
 
