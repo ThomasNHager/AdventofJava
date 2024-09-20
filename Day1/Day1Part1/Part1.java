@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class Day1 {
+public class Part1 {
   public static void main(String[] args){
 
     ArrayList<String> inputArray = new ArrayList<String>();
