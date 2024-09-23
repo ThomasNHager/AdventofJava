@@ -1,6 +1,7 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Day2Part1 {
 
@@ -9,6 +10,7 @@ public class Day2Part1 {
     // Regex to find the nubmer
     Pattern pattern = Pattern.compile("(\\d+)");
     Matcher matcher = pattern.matcher(input);
+    matcher.find();
     String numCubes = matcher.group(1);
 
     // String method to find the color
@@ -30,15 +32,19 @@ public class Day2Part1 {
 
     // Read in the input text
     ReadFile rf = new ReadFile();
-    ArrayList<String> inputArray = rf.readFile("./testInput.txt");
+    ArrayList<String> inputArray = rf.readFile("./gameInput.txt");
 
     // Define the limits of the cubes
-    int red = 12;
-    int green = 13;
-    int blue = 14;
+    HashMap<String, Integer> maxColors = new HashMap<String, Integer>();
+    maxColors.put("red", 12);
+    maxColors.put("green", 13);
+    maxColors.put("blue", 14);
 
+    int validTotal = 0;
     for (int i = 0; i < inputArray.size(); i++){
       // Iterate through the games
+      // Define a variable to check if game works
+      Boolean validGame = true;
 
       // Split out the game number and the different draws
       String[] splitGames = inputArray.get(i).split(":");
@@ -53,10 +59,23 @@ public class Day2Part1 {
         for (int k = 0; k < splitColors.length; k++){
           // Iterate through the different colors in the draw
 
+          // Get my working variables
           String[] numCol = findNumCol(splitColors[k]);
-          // To be continued
+          int workingInt = Integer.parseInt(numCol[0]);
+          String workingString = numCol[1];
 
+          // Evaluate if the game is valid 
+          if (maxColors.get(workingString) < workingInt){
+            validGame = false;
+          }
         }
+
+      }
+
+      if (validGame){
+
+        // Because the games start at 1 and the index starts at 0
+        validTotal = validTotal + i + 1;
 
       }
 
