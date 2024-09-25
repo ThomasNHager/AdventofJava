@@ -8,7 +8,7 @@ public class Day3Part1{
 
     // Read in the input file
     ReadFile rf = new ReadFile();
-    ArrayList<String> inputArray = rf.readFile("./gameInput.txt");
+    ArrayList<String> inputArray = rf.readFile("./wideTestInput.txt");
     int arrayLength = inputArray.size();
 
     // Create a hashmap to store the location of the symbols
@@ -22,7 +22,7 @@ public class Day3Part1{
       ArrayList<Integer> symbIndexList = new ArrayList<Integer>();
 
       // Regex to find the special characters
-      Pattern symbPattern = Pattern.compile("[^\\.\\d]\\W");
+      Pattern symbPattern = Pattern.compile("[^\\.\\d]");
       Matcher symbMatcher = symbPattern.matcher(inputArray.get(i));
 
       // Find the index of all of the special characters in the line
@@ -82,6 +82,7 @@ public class Day3Part1{
 
             if (workingLineSymbols.contains(l)){
               int partInt = Integer.parseInt(partNum);
+              // System.out.println("Found: " + partNum);
               runningTotal = runningTotal + partInt;
             }
 
