@@ -8,7 +8,7 @@ public class Day3Part1{
 
     // Read in the input file
     ReadFile rf = new ReadFile();
-    ArrayList<String> inputArray = rf.readFile("./wideTestInput.txt");
+    ArrayList<String> inputArray = rf.readFile("./gameInput.txt");
     int arrayLength = inputArray.size();
 
     // Create a hashmap to store the location of the symbols
