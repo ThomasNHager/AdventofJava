@@ -1,34 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 public class Day5Part1{
-  static HashMap<Long, Long> createHash(ArrayList<String> takeArray){
-    // Function to create a hashmap for each mapping type
-    HashMap<Long, Long> funcHash = new HashMap<Long, Long>();
-    for (int k = 1; k < takeArray.size(); k++){
-      // Index at 1 because I want to skip the name of the map
-      String workingString = takeArray.get(k);
-      String[] stringMaps = workingString.split(" ");
-
-      Long destStart = Long.parseLong(stringMaps[0]);
-      Long sourceStart = Long.parseLong(stringMaps[1]);
-      Long range = Long.parseLong(stringMaps[2]);
-
-      for (int l = 0; l < range; l++){
-        funcHash.put(sourceStart + l, destStart + l);
-      }
-    }
-    return(funcHash);
-  }
-
   public static void main(String[] args){
     // Read in the input
     ReadFile rf = new ReadFile();
-    ArrayList<String> inputArray = rf.readFile("./testInput.txt");
+    ArrayList<String> inputArray = rf.readFile("./gameInput");
 
     // Setup a hashmap for the different lists
     HashMap<Integer, ArrayList<String>> stringMappings = 
       new HashMap<Integer, ArrayList<String>>();
 
+    // Process into the hashmap
     int j = 0;
     for (int i = 0; i < inputArray.size(); i++){
       if (inputArray.get(i) == ""){
@@ -43,49 +25,48 @@ public class Day5Part1{
       stringMappings.put(j, workingList);
     }
 
-    HashMap<Long, Long> seedSoil = createHash(stringMappings.get(1));
-    HashMap<Long, Long> soilFert = createHash(stringMappings.get(2));
-    HashMap<Long, Long> fertWater = createHash(stringMappings.get(3));
-    HashMap<Long, Long> waterLight = createHash(stringMappings.get(4));
-    HashMap<Long, Long> lightTemp = createHash(stringMappings.get(5));
-    HashMap<Long, Long> tempHumid = createHash(stringMappings.get(6));
-    HashMap<Long, Long> humidLoc = createHash(stringMappings.get(7));
+    // Turn the seeds into a list of ints
+    ArrayList<String> seedString = stringMappings.get(0);
+    String[] seedSplit = seedString.get(0).split(" ");
+    ArrayList<Long> seedNumList = new ArrayList<Long>();
+    for (int k = 1; k < seedSplit.length; k++){
+      seedNumList.add(Long.parseLong(seedSplit[k]));
+    }
 
-    // Find the seeds 
-    String seedString = stringMappings.get(0).get(0);
-    String[] prefixSplit = seedString.split(":");
-    String[] seedsArray = prefixSplit[1].split(" ");
-    ArrayList<Long> seedIntList = new ArrayList<Long>();
+    // Make the new seed list
+    ArrayList<Long> processedSeeds = new ArrayList<Long>();
 
-    // Convert the seeds to ints 
-    for (int n = 0; n < seedsArray.length; n++){
-      if (seedsArray[n] == ""){
-        continue;
+    // Process through the seeds
+    for (Long seed : seedNumList){
+      // Indexing at one to skip the list of seeds
+      for (int l = 1; l < stringMappings.size(); l++){
+        // Work through the list of mappings, again skipping the name
+        for (int m = 1; m < stringMappings.get(l).size(); m++){
+          // Convert the string to a list of ints
+          String mappings = stringMappings.get(l).get(m);
+          String[] mappingsArray = mappings.split(" ");
+          ArrayList<Long> mappingsIntList = new ArrayList<Long>();
+          for (String map : mappingsArray){
+            mappingsIntList.add(Long.parseLong(map));
+          }
+
+          // Now check if the seed is in the range, if it is, add to it
+          if (seed >= mappingsIntList.get(1) &&
+              seed < mappingsIntList.get(1) + mappingsIntList.get(2)){
+              seed += mappingsIntList.get(0) - mappingsIntList.get(1);
+              break;
+              }
+        }
+
       }
-      seedIntList.add(Long.parseLong(seedsArray[n]));
+      processedSeeds.add(seed);
     }
 
-    // Make a list for the results, then run the numbers through the maps
-    ArrayList<Long> locationList = new ArrayList<Long>();
-    for (int o = 0; o < seedIntList.size(); o++){
-      Long workingInt = seedIntList.get(o);
-      workingInt = seedSoil.getOrDefault(workingInt, workingInt);
-      workingInt = soilFert.getOrDefault(workingInt, workingInt);
-      workingInt = fertWater.getOrDefault(workingInt, workingInt);
-      workingInt = waterLight.getOrDefault(workingInt, workingInt);
-      workingInt = lightTemp.getOrDefault(workingInt, workingInt);
-      workingInt = tempHumid.getOrDefault(workingInt, workingInt);
-      workingInt = humidLoc.getOrDefault(workingInt, workingInt);
-      locationList.add(workingInt);
-    }
-
-    // Find the smallest in the list
-    Long minInt = 100000000000000000L;
-    int minIndex;
-    for (int p = 0; p < locationList.size(); p++){
-      if (locationList.get(p) < minInt){
-        minInt = locationList.get(p);
-        minIndex = p;
+    // Find the smallest
+    Long minSeed = processedSeeds.get(0);
+    for (Long pSeed : processedSeeds){
+      if (pSeed < minSeed){
+        minSeed = pSeed;
       }
     }
   }
